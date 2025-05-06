@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- Implementation Section -->
+    <section id="implementation" class="py-16 px-6 md:px-12 lg:px-24">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Implementation Details</h2>
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Model Architecture</h3>
+                    <p class="text-gray-700">
+                        The detection model is built using PyTorch and leverages a modified YOLOv5 architecture optimized for UAV detection with accuracy and real-time performance in mind.
+                    </p>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Technology Stack</h3>
+                    <ul class="list-disc pl-6 text-gray-700">
+                        <li>Backend: Python, Flask</li>
+                        <li>Machine Learning: PyTorch, OpenCV</li>
+                        <li>Frontend: HTML, JavaScript, Tailwind CSS</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Performance Metrics</h3>
+                    <p class="text-gray-700">
+                        The current model achieves 92% average precision on our UAV detection benchmark with an inference speed of 30 frames per second on GPU hardware.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+</body>
+</html>
