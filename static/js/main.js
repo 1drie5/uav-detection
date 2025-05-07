@@ -52,14 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add source with proper MIME type
         const source = document.createElement('source');
         source.src = url;
-        source.type = 'video/mp4'; // Assuming mp4, adjust if other types are common
+        source.type = 'video/mp4';
         video.appendChild(source);
 
         // Handle loading success
         video.addEventListener('loadeddata', () => {
             console.log("Video loaded successfully:", url);
-            if (outputPlaceholder) outputPlaceholder.classList.add('hidden'); // Hide placeholder on successful load
-            video.classList.remove('hidden'); // Ensure video is visible
+            if (outputPlaceholder) outputPlaceholder.classList.add('hidden'); 
+            video.classList.remove('hidden');
         });
 
         // Handle errors
@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (errorHandler) errorHandler(url, e);
         });
 
-        // Clear container and add video
         container.innerHTML = '';
         container.appendChild(video);
 
@@ -93,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // For videos, specifically validate the file extension as well (some MP4 files might have incorrect MIME types)
     if (isValidVideo) {
         const fileExtension = file.name.split('.').pop().toLowerCase();
         if (fileExtension !== 'mp4') {
@@ -185,8 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (outputPlaceholder) outputPlaceholder.classList.remove('hidden');
 
 
-                // Try to load the video with a retry mechanism
-                setTimeout(() => { // Initial delay to help ensure file is ready on the server
+                setTimeout(() => { 
                     loadVideo(videoSrcWithCacheBuster, outputPreview, (url, error) => {
                         // Error handling with retry
                         if (outputPreview) outputPreview.innerHTML = `
@@ -195,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p><small>Attempted URL: ${url}</small></p>
                             </div>`;
 
-                        // Retry after a short delay with a new cache buster
                         setTimeout(() => {
                             const retryUrl = `${resultUrl}?t=${Date.now()}`;
                             console.log("Retrying video load with URL:", retryUrl);
@@ -243,10 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (outputPreview) outputPreview.innerHTML = '<p class="text-red-500 p-3 bg-red-100 rounded-lg">Error loading result image.</p>';
                      if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); // Show placeholder on error
                 });
-                // Append immediately, loading message handled by onload/onerror
                 if (outputPreview) {
                     outputPreview.innerHTML = '<p class="text-gray-500">Loading image result...</p>'; // Initial loading message
-                    // outputPreview.appendChild(outputImage); // The image will replace this once loaded or error
                 }
 
 
@@ -272,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (directVideoLink) directVideoLink.href = resultUrl; // Link to image
             }
 
-            // Prepare download functionality
+            // download functionality
             if (downloadButton) downloadButton.disabled = false;
             try {
                 const fileResponse = await fetch(resultUrl);
@@ -282,15 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const blob = await fileResponse.blob();
                 outputBlob = blob;
 
-                // Remove any previous event listener before adding a new one to prevent multiple downloads
                 const newDownloadButton = downloadButton.cloneNode(true);
                 downloadButton.parentNode.replaceChild(newDownloadButton, downloadButton);
-                // downloadButton = newDownloadButton; // Re-assign to the new button if you need to reference it later
 
                 newDownloadButton.addEventListener('click', () => {
                     if (!outputBlob) {
                         console.error("Output blob not available for download.");
-                        // Optionally inform the user
                         if (status) status.textContent = 'Error: File for download not ready.';
                         return;
                     }
@@ -299,22 +290,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const downloadName = `output_${Date.now()}.${extension}`;
                     a.href = URL.createObjectURL(outputBlob);
                     a.download = downloadName;
-                    document.body.appendChild(a); // Required for Firefox
+                    document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a); // Clean up
                     URL.revokeObjectURL(a.href);
                 });
-                 if (downloadButton) downloadButton.disabled = false; // Ensure the original reference is also enabled if not replaced globally
-                 // if you replaced downloadButton globally, then newDownloadButton.disabled = false;
+                 if (downloadButton) downloadButton.disabled = false;
 
             } catch (fetchError) {
                 console.error("Error fetching result file for download:", fetchError);
                 if (status) status.textContent = 'Error preparing download.';
                 if (downloadButton) downloadButton.disabled = true;
-                if (outputPreview && !isVideo) { // If it's not a video, the error might be related to fetching image
+                if (outputPreview && !isVideo) { 
                     outputPreview.innerHTML += `<p class="text-red-500 text-sm">Could not prepare file for download: ${fetchError.message}</p>`;
                 } else if (outputPreview && isVideo) {
-                     // The video loading has its own error display, but we can add a note about download
                     const existingContent = outputPreview.innerHTML;
                     outputPreview.innerHTML = existingContent + `<p class="text-red-500 text-sm mt-2">Note: Could not prepare file for download: ${fetchError.message}</p>`;
                 }
@@ -326,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (uploadProgress) uploadProgress.classList.add('hidden');
             console.error("Upload or processing failed:", err);
             if (outputPreview) outputPreview.innerHTML = `<p class="text-red-500 p-3 bg-red-100 rounded-lg">${err.message}</p>`;
-            if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); // Show placeholder on error
+            if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); 
             if (downloadButton) downloadButton.disabled = true;
         }
     });
