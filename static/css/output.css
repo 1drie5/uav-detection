@@ -680,6 +680,7 @@ footer {
   background-color: #f8fafc;
   border-top: 1px solid #e5e7eb;
 }
+
 @media (max-width: 768px) {
   .section-title {
     font-size: 1.75rem;
