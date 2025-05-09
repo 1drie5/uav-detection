@@ -15,6 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const debugPath = document.getElementById('debug-path');
     const directVideoLink = document.getElementById('direct-video-link');
 
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+        @keyframes wave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .progress-wavy {
+            background: linear-gradient(90deg, #ff5a5a, #ff8080, #ff5a5a);
+            background-size: 200% 100%;
+            animation: wave 2s linear infinite;
+            transition: width 0.3s ease;
+        }
+    `;
+    document.head.appendChild(styleElement);
+
     const outputVideoElement = document.getElementById('output-video'); // Renamed to avoid conflict with 'outputVideo' in fileUpload listener
     if (outputVideoElement && outputVideoElement.getAttribute('src') && outputVideoElement.getAttribute('src') !== '') {
         console.log("Initial video URL found:", outputVideoElement.getAttribute('src'));
@@ -74,31 +91,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return video;
     }
 
-
     fileUpload.addEventListener('change', async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-    // Validate file type
-    const fileType = file.type;
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    const validVideoTypes = ['video/mp4'];
-    
-    const isValidImage = validImageTypes.includes(fileType);
-    const isValidVideo = validVideoTypes.includes(fileType);
-    
-    if (!isValidImage && !isValidVideo) {
-        inputPreview.innerHTML = '<p class="text-red-500">Invalid file type. Please upload JPG, PNG or MP4 files only.</p>';
-        return;
-    }
-    
-    if (isValidVideo) {
-        const fileExtension = file.name.split('.').pop().toLowerCase();
-        if (fileExtension !== 'mp4') {
-            inputPreview.innerHTML = '<p class="text-red-500">Only MP4 video format is supported.</p>';
+        // Validate file type
+        const fileType = file.type;
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        const validVideoTypes = ['video/mp4'];
+        
+        const isValidImage = validImageTypes.includes(fileType);
+        const isValidVideo = validVideoTypes.includes(fileType);
+        
+        if (!isValidImage && !isValidVideo) {
+            inputPreview.innerHTML = '<p class="text-red-500">Invalid file type. Please upload JPG, PNG or MP4 files only.</p>';
             return;
         }
-    }
+        
+        if (isValidVideo) {
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (fileExtension !== 'mp4') {
+                inputPreview.innerHTML = '<p class="text-red-500">Only MP4 video format is supported.</p>';
+                return;
+            }
+        }
 
         originalFile = file;
         if (detectionInfo) detectionInfo.classList.add('hidden');
@@ -109,7 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (outputPreview) outputPreview.innerHTML = '<p class="text-gray-500">Processing...</p>';
         if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); // Show placeholder initially
         if (uploadProgress) uploadProgress.classList.remove('hidden');
-        if (progressBar) progressBar.style.width = '0%';
+        
+        // Apply wavy red animation to the progress bar
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.classList.remove('bg-primary');
+            progressBar.classList.add('progress-wavy');
+        }
+        
         if (progressText) progressText.textContent = '0%';
         if (status) status.textContent = 'Processing...';
         if (downloadButton) downloadButton.disabled = true;
@@ -135,16 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         reader.readAsDataURL(file);
 
+        // More realistic progress simulation
         let currentProgress = 0;
+        const steps = [
+            { target: 10, speed: 150 },   
+            { target: 20, speed: 350 },  
+            { target: 40, speed: 600 },
+            { target: 60, speed: 800 }, 
+            { target: 75, speed: 1150 },  
+            { target: 90, speed: 1500 }   
+        ];
+        
+        let stepIndex = 0;
+        
         const progressInterval = setInterval(() => {
-            currentProgress += 5;
-            if (currentProgress <= 90) {
+            if (stepIndex < steps.length) {
+                const { target, speed } = steps[stepIndex];
+                currentProgress += 1;
+                
+                if (currentProgress >= target) {
+                    stepIndex++;
+                }
+                
                 if (progressBar) progressBar.style.width = `${currentProgress}%`;
                 if (progressText) progressText.textContent = `${currentProgress}%`;
             } else {
                 clearInterval(progressInterval);
             }
-        }, 200);
+        }, steps[stepIndex]?.speed || 200);
 
         const formData = new FormData();
         formData.append('file', file);
@@ -165,7 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             const resultUrl = data.result_path;
 
-            if (progressBar) progressBar.style.width = '100%';
+            if (progressBar) {
+                progressBar.style.width = '100%';
+            }
             if (progressText) progressText.textContent = '100%';
             if (uploadProgress) setTimeout(() => uploadProgress.classList.add('hidden'), 500);
             if (status) status.textContent = 'Completed';
