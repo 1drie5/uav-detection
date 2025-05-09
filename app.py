@@ -144,7 +144,7 @@ def process_video(video_path):
             project=app.config['RESULTS_FOLDER'],
             name="predict",  # YOLO saves in a 'predict' subdirectory by default
             conf=0.25,
-            imgsz=416,
+            imgsz=640,
             exist_ok=True
         )
         
