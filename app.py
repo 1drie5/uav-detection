@@ -65,7 +65,7 @@ create_error_template('500.html', '500 - Server Error', 'An internal server erro
 
 # Load the YOLO model once at startup
 try:
-    model = YOLO('models/best.pt')
+    model = YOLO('models/final.pt')
     app.logger.info("YOLO model loaded successfully")
 except Exception as e:
     app.logger.error(f"Error loading YOLO model: {str(e)}")
@@ -144,7 +144,7 @@ def process_video(video_path):
             project=app.config['RESULTS_FOLDER'],
             name="predict",  # YOLO saves in a 'predict' subdirectory by default
             conf=0.25,
-            imgsz=416,
+            imgsz=640,
             exist_ok=True
         )
         
