@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (detectionInfo) detectionInfo.classList.add('hidden');
         if (detectionList) detectionList.innerHTML = '';
         if (debugInfo) debugInfo.classList.add('hidden');
-        if (inputFilename) inputFilename.textContent = `Selected file: ${file.name}`;
+        if (inputFilename) inputFilename.textContent = Selected file: ${file.name};
         if (inputPreview) inputPreview.innerHTML = '';
         if (outputPreview) outputPreview.innerHTML = '<p class="text-gray-500">Processing...</p>';
         if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); // Show placeholder initially
@@ -180,8 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     stepIndex++;
                 }
                 
-                if (progressBar) progressBar.style.width = `${currentProgress}%`;
-                if (progressText) progressText.textContent = `${currentProgress}%`;
+                if (progressBar) progressBar.style.width = ${currentProgress}%;
+                if (progressText) progressText.textContent = ${currentProgress}%;
             } else {
                 clearInterval(progressInterval);
             }
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isVideo) {
                 // Add cache buster to avoid browser caching issues
-                const videoSrcWithCacheBuster = `${resultUrl}?t=${Date.now()}`;
+                const videoSrcWithCacheBuster = ${resultUrl}?t=${Date.now()};
 
                 // Show loading indicator
                 if (outputPreview) outputPreview.innerHTML = '<p class="text-gray-500">Loading video result...</p>';
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>`;
 
                         setTimeout(() => {
-                            const retryUrl = `${resultUrl}?t=${Date.now()}`;
+                            const retryUrl = ${resultUrl}?t=${Date.now()};
                             console.log("Retrying video load with URL:", retryUrl);
                             loadVideo(retryUrl, outputPreview, (finalUrl, finalError) => {
                                 // Final error handling if retry also fails
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const fileResponse = await fetch(resultUrl);
                 if (!fileResponse.ok) {
-                    throw new Error(`Failed to fetch the result file for download. Status: ${fileResponse.status}`);
+                    throw new Error(Failed to fetch the result file for download. Status: ${fileResponse.status});
                 }
                 const blob = await fileResponse.blob();
                 outputBlob = blob;
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     const a = document.createElement('a');
                     const extension = outputBlob.type.includes('video') ? (resultUrl.split('.').pop() || 'mp4') : (resultUrl.split('.').pop() || 'jpg');
-                    const downloadName = `output_${Date.now()}.${extension}`;
+                    const downloadName = output_${Date.now()}.${extension};
                     a.href = URL.createObjectURL(outputBlob);
                     a.download = downloadName;
                     document.body.appendChild(a);
@@ -345,10 +345,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (status) status.textContent = 'Error preparing download.';
                 if (downloadButton) downloadButton.disabled = true;
                 if (outputPreview && !isVideo) { 
-                    outputPreview.innerHTML += `<p class="text-red-500 text-sm">Could not prepare file for download: ${fetchError.message}</p>`;
+                    outputPreview.innerHTML += <p class="text-red-500 text-sm">Could not prepare file for download: ${fetchError.message}</p>;
                 } else if (outputPreview && isVideo) {
                     const existingContent = outputPreview.innerHTML;
-                    outputPreview.innerHTML = existingContent + `<p class="text-red-500 text-sm mt-2">Note: Could not prepare file for download: ${fetchError.message}</p>`;
+                    outputPreview.innerHTML = existingContent + <p class="text-red-500 text-sm mt-2">Note: Could not prepare file for download: ${fetchError.message}</p>;
                 }
             }
 
@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (status) status.textContent = 'Error';
             if (uploadProgress) uploadProgress.classList.add('hidden');
             console.error("Upload or processing failed:", err);
-            if (outputPreview) outputPreview.innerHTML = `<p class="text-red-500 p-3 bg-red-100 rounded-lg">${err.message}</p>`;
+            if (outputPreview) outputPreview.innerHTML = <p class="text-red-500 p-3 bg-red-100 rounded-lg">${err.message}</p>;
             if (outputPlaceholder) outputPlaceholder.classList.remove('hidden'); 
             if (downloadButton) downloadButton.disabled = true;
         }

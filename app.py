@@ -9,7 +9,7 @@ import pathlib
 import shutil
 
 # Initialize Flask application
-app = Flask(__name__, 
+app = Flask(_name_, 
            static_folder=os.path.abspath('static'), 
            template_folder=os.path.abspath('templates'))
 
@@ -26,12 +26,12 @@ app.config['RESULTS_FOLDER'] = os.path.abspath(app.config['RESULTS_FOLDER'])
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['RESULTS_FOLDER'], exist_ok=True)
 
-templates_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+templates_dir = os.path.join(os.path.dirname(os.path.abspath(_file_)), 'templates')
 os.makedirs(templates_dir, exist_ok=True)
 
 # Load the YOLO model once 
 try:
-    model = YOLO('models/best.pt')
+    model = YOLO('models/final.pt')
     app.logger.info("YOLO model loaded successfully")
 except Exception as e:
     app.logger.error(f"Error loading YOLO model: {str(e)}")
@@ -284,7 +284,7 @@ def page_not_found(error):
 def internal_server_error(error):
     return render_template('500.html'), 500
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     # static folder permissions to ensure files are readable by the web server
     app.logger.info(f"Ensuring static folder permissions are set correctly")
     for root, dirs, files in os.walk(app.static_folder):
