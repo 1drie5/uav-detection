@@ -12,3 +12,6 @@ node_modules/
 # Python cache
 __pycache__/
 *.pyc
+
+/static/results/
+/static/uploads/

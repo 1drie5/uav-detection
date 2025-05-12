@@ -188,6 +188,32 @@ footer {
     border-top: 1px solid #e5e7eb;
 }
 
+/* Download button styling */
+.download-btn {
+    background-color: black;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .download-btn:hover:not(:disabled) {
+    background-color: #374151;
+    border-color: #9ca3af;
+    cursor: pointer;
+  }
+  
+  .download-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .download-btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .section-title {
