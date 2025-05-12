@@ -1,85 +1,102 @@
-{% extends "layout.html" %}
-
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <!-- Home Section -->
 <section id="home" class="pt-32 pb-16 px-6 md:px-12 lg:px-24">
-    <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">UAV Detection</h1>
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
+      UAV Detection
+    </h1>
 
-        <!-- Main App Container -->
-        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
-            <!-- Upload Section -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Upload Image or Video</h2>
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Upload Component -->
-                    <div class="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                        <input type="file" id="file-upload" class="hidden" accept="image/jpeg,image/png,image/jpg,video/mp4" />
-                        <label for="file-upload" class="cursor-pointer">
-                            <div class="flex flex-col items-center justify-center py-8">
-                                <p class="text-gray-600 text-lg font-medium">Drop files here or click to upload</p>
-                                <p class="text-gray-500 text-sm mt-1">Supports: JPG, PNG, MP4 only</p>
-                            </div>
-                        </label>
-                        <div id="upload-progress" class="hidden mt-4">
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div id="progress-bar" class="bg-primary h-2.5 rounded-full w-0"></div>
-                            </div>
-                            <p id="progress-text" class="text-sm text-gray-600 mt-1">0%</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Main App Container -->
+    <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
+      <!-- Upload Section -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+          Upload Image or Video
+        </h2>
+        <div class="flex flex-col md:flex-row gap-6">
+          <!-- Upload Component -->
+          <div
+            class="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center"
+          >
+            <input
+              type="file"
+              id="file-upload"
+              class="hidden"
+              accept="image/jpeg,image/png,image/jpg,video/mp4"
+            />
+            <label for="file-upload" class="cursor-pointer">
+              <div class="flex flex-col items-center justify-center py-8">
+                <p class="text-gray-600 text-lg font-medium">
+                  Drop files here or click to upload
+                </p>
+                <p class="text-gray-500 text-sm mt-1">
+                  Supports: JPG, PNG, MP4 only
+                </p>
+              </div>
+            </label>
+            <div id="upload-progress" class="hidden mt-4">
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="h-2.5 rounded-full w-0"></div>
+              </div>
+              <p id="progress-text" class="text-sm text-gray-600 mt-1">0%</p>
             </div>
-
-            <!-- Preview Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Input Preview -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h3 class="text-lg font-medium text-gray-700 mb-3">Input Preview</h3>
-                    <div id="input-preview" class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                        <p class="text-gray-500">No file selected</p>
-                    </div>
-                    <p id="input-filename" class="text-sm text-gray-600 mt-2"></p>
-                </div>
-
-                <!-- Output Preview -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h3 class="text-lg font-medium text-gray-700 mb-3">Detection Output</h3>
-                    <div id="output-preview" class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                        <!-- Add the video tag here -->
-                        <video controls class="max-w-full mx-auto hidden" id="output-video">
-                            <source src="{{ video_url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <p id="output-placeholder" class="text-gray-500">Process an input file to see detection results</p>
-                    </div>
-                    <div class="flex justify-between items-center mt-3">
-                        <p id="status" class="text-sm text-gray-600">Ready</p>
-                        <button id="download-button" class="bg-primary text-white px-4 py-2 rounded-lg disabled:opacity-50" disabled>
-                            Download Result
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Detection Info Section -->
-            <div id="detection-info" class="mt-6 bg-gray-50 rounded-lg p-4 hidden">
-                <h3 class="text-lg font-medium text-gray-700 mb-3">Detection Details</h3>
-                <div id="detection-list" class="space-y-2">
-                    <!-- Detection items will be added here dynamically -->
-                </div>
-            </div>
-            
-            <!-- Debug Info -->
-            <div id="debug-info" class="mt-4 text-sm text-gray-500 hidden">
-                <p>Video path: <span id="debug-path"></span></p>
-                <a id="direct-video-link" href="#" class="text-primary underline" target="_blank">Direct link to video</a>
-            </div>
+          </div>
         </div>
-    </div>
-</section>
-{% endblock %}
+      </div>
 
-{% block scripts %}
+      <!-- Preview Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Input Preview -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="text-lg font-medium text-gray-700 mb-3">Input Preview</h3>
+          <div
+            id="input-preview"
+            class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center"
+          >
+            <p class="text-gray-500">No file selected</p>
+          </div>
+          <p id="input-filename" class="text-sm text-gray-600 mt-2"></p>
+        </div>
+
+        <!-- Output Preview -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="text-lg font-medium text-gray-700 mb-3">
+            Detection Output
+          </h3>
+          <div
+            id="output-preview"
+            class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center"
+          >
+            <!-- Add the video tag here -->
+            <video controls class="max-w-full mx-auto hidden" id="output-video">
+              <source src="{{ video_url }}" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <p id="output-placeholder" class="text-gray-500">
+              Process an input file to see detection results
+            </p>
+          </div>
+          <div class="flex justify-between items-center mt-3">
+            <p id="status" class="text-sm text-gray-600">Ready</p>
+            <button id="download-button" class="download-btn" disabled>
+              Download Result
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detection Info Section -->
+      <div id="detection-info" class="mt-6 bg-gray-50 rounded-lg p-4 hidden">
+        <h3 class="text-lg font-medium text-gray-700 mb-3">
+          Detection Details
+        </h3>
+        <div id="detection-list" class="space-y-2">
+          <!-- Detection items will be added here dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
